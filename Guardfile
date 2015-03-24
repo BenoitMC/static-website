@@ -11,7 +11,7 @@ def log(msg)
 end
 
 guard :shell do
-  watch /^css/ do |file|
+  watch /^css\/.+/ do |file|
     log(file.first)
     
     File.open("public/application.css", "w+") do |f|
@@ -19,7 +19,7 @@ guard :shell do
     end
   end
   
-  watch /^js/ do |file|
+  watch /^js\/.+/ do |file|
     log(file.first)
     
     File.open("public/application.js", "w+") do |f|
