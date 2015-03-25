@@ -10,6 +10,11 @@ def log(msg)
   $stdout.puts "#{time} : #{msg}"
 end
 
+def asset(file)
+  version = File.mtime(File.join("public/", file)).to_i
+  "#{file}?v=#{version}"
+end
+
 guard :shell do
   watch /^css\/.+/ do |file|
     log(file.first)
