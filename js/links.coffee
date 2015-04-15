@@ -1,4 +1,4 @@
 $ ->
   # Open all external links in a new page
-  $("a[*='://']").map ->
+  $("a[href*='://']").map ->
     this.target = "_blank"
