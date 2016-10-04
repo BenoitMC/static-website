@@ -1,7 +1,13 @@
 require "bundler"
 Bundler.require
 
+jquery_asset_path = File.join(
+  Bundler.rubygems.find_name('jquery-rails').first.full_gem_path,
+  "vendor/assets/javascripts/"
+)
+
 sprockets = Sprockets::Environment.new
+sprockets.append_path jquery_asset_path
 sprockets.append_path "css"
 sprockets.append_path "js"
 
@@ -16,28 +22,28 @@ def asset(file)
 end
 
 guard :shell do
-  watch /^css\/.+/ do |file|
-    log(file.first)
-    
+  watch(/^css\/.+/) do |match|
+    log file = match[0]
+
     File.open("public/application.css", "w+") do |f|
       f.write sprockets["application.sass"].to_s
     end
   end
-  
-  watch /^js\/.+/ do |file|
-    log(file.first)
-    
+
+  watch(/^js\/.+/) do |match|
+    log file = match[0]
+
     File.open("public/application.js", "w+") do |f|
       f.write sprockets["application.coffee"].to_s
     end
   end
-  
-  watch /^pages\/([^\/]+)\.[a-z]+$/ do |file|
-    log(file.first)
-    
-    body = Tilt.new(file.first).render(self)
+
+  watch(/^pages\/([^\/]+)\.[a-z]+$/) do |match|
+    log file = match[0]
+
+    body = Tilt.new(file).render(self)
     html = Tilt.new("pages/layouts/application.html.slim").render(self) { body }
-    
-    File.open("public/#{file.last}", "w+") { |f| f.write html }
+
+    File.open("public/#{match[-1]}", "w+") { |f| f.write html }
   end
 end
