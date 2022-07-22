@@ -1,16 +1,9 @@
 require "bundler"
-require "webrick"
 Bundler.require
 
 Thread.new { WEBrick::HTTPServer.new(Port: 3000, DocumentRoot: "public/", AccessLog: []).start }
 
-jquery_asset_path = File.join(
-  Bundler.rubygems.find_name('jquery-rails').first.full_gem_path,
-  "vendor/assets/javascripts/"
-)
-
 sprockets = Sprockets::Environment.new
-sprockets.append_path jquery_asset_path
 sprockets.append_path "css"
 sprockets.append_path "js"
 
